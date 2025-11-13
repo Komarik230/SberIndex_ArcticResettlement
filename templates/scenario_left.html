@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Уехать — Нельзя Остаться</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      background: #050914;
+      color: white;
+      font-family: "Inter", sans-serif;
+    }
+
+    .map-layer {
+      position: absolute;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      display: block;
+      transition: opacity 2s ease;
+    }
+
+    #mapFull { z-index: 1; }
+    #mapDecline { z-index: 1; opacity: 0; } /* второй слой поначалу невидим */
+
+    .scenario-text {
+      position: absolute;
+      bottom: 60px;
+      left: 60px;
+      font-size: 1.9rem;
+      line-height: 1.45;
+      max-width: 480px;
+      opacity: 0;
+      animation: fadeIn 2s ease forwards 1.5s;
+      z-index: 3;
+      transition: opacity 1s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .hidden-text {
+      opacity: 0 !important;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- 1. Полная карта -->
+  <object id="mapFull" class="map-layer" type="image/svg+xml" data="/static/Карта_1_pora_data-dataframe.svg"></object>
+
+  <!-- 2. Карта только с красными точками -->
+  <object id="mapDecline" class="map-layer" type="image/svg+xml" data="/static/Карта_1_pora_data-dataframe.svg"></object>
+
+  <!-- Текст -->
+  <div id="scenarioText" class="scenario-text">
+    <p><strong>В некоторых местах запятая стоит иначе.</strong></p>
+    <p>
+      Люди уезжают.<br>
+      Становится меньше света,<br>
+      меньше голосов,<br>
+      меньше детей в школах.
+    </p>
+  </div>
+
+  <script>
+  window.addEventListener("load", () => {
+    const mapFull = document.getElementById("mapFull");
+    const mapDecline = document.getElementById("mapDecline");
+    const text = document.getElementById("scenarioText");
+
+    /* === 1. Первая карта: все точки, красные выцветают в серый === */
+    mapFull.addEventListener("load", () => {
+      const svg = mapFull.contentDocument;
+      if (!svg) return;
+
+      // Белые контуры
+      svg.querySelectorAll("[stroke]").forEach(el => {
+        el.setAttribute("stroke", "#ffffff");
+        el.setAttribute("stroke-width", "0.8");
+      });
+
+      // Красные точки плавно становятся серыми с небольшой задержкой
+      const redDots = svg.querySelectorAll('[fill="#F94F0D"], [fill="#f94f0d"], [style*="#F94F0D"], [style*="#f94f0d"]');
+      redDots.forEach(dot => {
+        dot.style.transition = "fill 3s ease-in-out, opacity 3s ease-in-out";
+        const delay = 600 + Math.random() * 1200;
+        setTimeout(() => {
+          dot.style.fill = "#888888"; // гаснут в серый
+        }, delay);
+      });
+    });
+
+    /* === 2. Вторая карта: только красные точки (остаются) === */
+    mapDecline.addEventListener("load", () => {
+      const svg = mapDecline.contentDocument;
+      if (!svg) return;
+
+      // Белые контуры
+      svg.querySelectorAll("[stroke]").forEach(el => {
+        el.setAttribute("stroke", "#ffffff");
+        el.setAttribute("stroke-width", "0.8");
+      });
+
+      // Скрываем голубые
+      const blueDots = svg.querySelectorAll('[fill="#9CF4EE"], [fill="#9cf4ee"], [style*="#9CF4EE"], [style*="#9cf4ee"]');
+      blueDots.forEach(dot => {
+        dot.style.transition = "opacity 1.5s ease-in";
+        dot.style.opacity = "0";
+      });
+    });
+
+    /* === 3. Прокрутка вниз → переход на слой с убыванием === */
+    let switched = false;
+    function switchToDecline() {
+      if (switched) return;
+      switched = true;
+
+      text.classList.add("hidden-text");  // убираем текст
+      mapFull.style.opacity = "0";        // гасим полную карту
+      mapDecline.style.opacity = "1";     // показываем карту с убывающими
+    }
+
+    // События для прокрутки и клавиш
+    window.addEventListener("wheel", (e) => {
+      if (e.deltaY > 30) switchToDecline();
+    }, { passive: true });
+
+    window.addEventListener("keydown", (e) => {
+      const k = e.key.toLowerCase();
+      if (k === 'arrowdown' || k === 'pagedown' || k === ' ') {
+        e.preventDefault();
+        switchToDecline();
+      }
+    });
+
+    // свайп вверх (тач)
+    let startY = null;
+    window.addEventListener("touchstart", e => {
+      if (e.touches.length) startY = e.touches[0].clientY;
+    }, { passive: true });
+    window.addEventListener("touchend", e => {
+      if (startY == null) return;
+      const endY = e.changedTouches[0].clientY;
+      if (startY - endY > 60) switchToDecline();
+      startY = null;
+    }, { passive: true });
+  });
+  </script>
+
+</body>
+</html>

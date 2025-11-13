@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Те, где запятая стоит иначе</title>
+  <link rel="stylesheet" href="/static/style.css">
+
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      background: #050914;
+      color: white;
+      font-family: "Inter", sans-serif;
+    }
+
+    object {
+      width: 100vw;
+      height: 100vh;
+      display: block;
+    }
+
+    .scenario-text {
+      position: absolute;
+      bottom: 60px;
+      left: 60px;
+      font-size: 1.9rem;
+      line-height: 1.45;
+      max-width: 480px;
+      opacity: 0;
+      animation: fadeIn 2s ease forwards 1.2s;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- та же карта -->
+  <object id="map" type="image/svg+xml" data="/static/Карта_1_pora_data-dataframe.svg"></object>
+
+  <div class="scenario-text">
+    <p><strong>Те, где запятая стоит иначе.</strong></p>
+    <p>Люди уезжают. Свет становится тусклее.</p>
+  </div>
+
+  <script>
+  window.addEventListener("load", () => {
+    const obj = document.getElementById("map");
+    obj.addEventListener("load", () => {
+      const svgDoc = obj.contentDocument;
+      if (!svgDoc) return;
+
+      // Белая обводка
+      svgDoc.querySelectorAll("[stroke]").forEach(el => {
+        el.setAttribute("stroke", "#ffffff");
+        el.setAttribute("stroke-width", "0.8");
+      });
+
+      // Прячем голубые точки (оставляем только убывающие)
+      const blueDots = svgDoc.querySelectorAll('[fill="#9CF4EE"], [fill="#9cf4ee"]');
+      blueDots.forEach(dot => {
+        dot.style.transition = "opacity 2s ease-in";
+        dot.style.opacity = "0";
+      });
+    });
+  });
+  </script>
+
+</body>
+</html>

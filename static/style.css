@@ -1,0 +1,141 @@
+/* ====== Подключение шрифтов ====== */
+@font-face {
+    font-family: "Druk Text Wide Cy TT Heavy";
+    src: url("/static/fonts/DrukTextWideCyTT-Heavy.ttf") format("truetype");
+    font-weight: 900;
+}
+
+@font-face {
+    font-family: "Ledger";
+    src: url("/static/fonts/Ledger-Regular.ttf") format("truetype");
+    font-weight: 400;
+}
+
+/* ====== Базовые стили ====== */
+body {
+    margin: 0;
+    background: #322C55; /* изменён фон */
+    color: white;
+    font-family: "Inter", sans-serif;
+    transition: background 0.4s;
+}
+
+body.cold {
+    background: #081427;
+}
+
+.container {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.text-block {
+    text-align: center;
+    font-size: 2.4rem;
+    line-height: 1.6;
+}
+
+/* ====== Текст "АРКТИКА. Уехать, нельзя, остаться." ====== */
+.text-block .line:first-child {
+    font-family: "Druk Text Wide Cy TT Heavy", sans-serif;
+    font-weight: 900;
+    font-size: 3.2rem;
+    letter-spacing: 0.03em;
+    margin-bottom: 0.4em;
+}
+
+.text-block .line:nth-child(2) {
+    font-family: "Druk Text Wide Cy TT Heavy", sans-serif;
+    font-weight: 900;
+    font-size: 2.8rem;
+    line-height: 1.3;
+}
+
+/* ====== Запятые ====== */
+.comma {
+    cursor: pointer;
+    padding: 4px;
+    transition: color 0.2s, text-shadow 0.2s;
+}
+
+.comma:hover {
+    color: #8fdcff;
+    text-shadow: 0 0 12px #7dd0ff;
+}
+
+/* ====== Подзаголовок ====== */
+.subtitle {
+    margin-top: 28px;
+    font-family: "Ledger", serif;
+    font-size: 1.4rem;
+    line-height: 1.6;
+    opacity: 0.9;
+}
+
+/* ====== Дополнительные стили для сценариев ====== */
+.dark-bg {
+    background: #050914;
+    overflow: hidden;
+}
+
+.scene-container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+}
+
+#mapCanvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.scenario-text {
+    position: absolute;
+    bottom: 60px;
+    left: 60px;
+    color: #ffffff;
+    font-size: 1.8rem;
+    line-height: 1.5;
+    max-width: 450px;
+}
+
+.fade-in {
+    animation: fadeIn 2s ease forwards 1s;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+
+body.left-hover {
+    background: #2C2729; /* цвет при наведении на левую запятую */
+}
+
+body.right-hover {
+    background: #1677A8;
+    color: #000; /* чтобы текст оставался читаемым */
+    transition: background 0.4s, color 0.4s;
+}
+
+#legend {
+  position: fixed;
+  right: 40px;       /* отступ от правого края */
+  bottom: 40px;      /* или top: 40px — если хочешь сверху */
+  width: 300px;      /* подбери под размер своей легенды */
+  height: auto;
+  z-index: 3;        /* выше карты и сияния */
+  opacity: 0.85;     /* лёгкая прозрачность, можно убрать */
+  pointer-events: none; /* чтобы не мешала кликам по карте */
+}
+
+
+@keyframes pulse {
+  0%   { transform: scale(1); opacity: 0.7; }
+  50%  { transform: scale(1.6); opacity: 1; }
+  100% { transform: scale(1); opacity: 0.7; }
+}
