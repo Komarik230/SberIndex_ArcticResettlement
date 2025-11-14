@@ -1,177 +1,113 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <title>Уехать — карта (тёмное сияние)</title>
-
-  <style>
-    @font-face {
-      font-family: 'Druk';
-      src: url('/static/fonts/DrukTextWideCyTT-Heavy.ttf') format('truetype');
-      font-weight: 900;
-    }
-
-    html, body {
-      margin: 0;
-      padding: 0;
-      width: 100%;
-      height: 200vh;
-      overflow-x: hidden;
-      background: #040A16; /* ГЛУБОКОЕ ТЁМНОЕ АРКТИЧЕСКОЕ НЕБО */
-    }
-
-    /* CANVAS */
-    canvas#auroraCanvas {
-      position: fixed;
-      inset: 0;
-      width: 100vw;
-      height: 100vh;
-      z-index: 1;
-      pointer-events: none;
-    }
-
-    /* КАРТА */
-    object#map {
-      width: 100vw;
-      height: 100vh;
-      z-index: 2;
-      position: relative;
-      display: block;
-    }
-
-    /* ЛЕГЕНДА — идентична правому сценарию */
-    #legend {
-      position: fixed;
-      left: 24px;
-      top: 24px;
-      width: 180px;
-      opacity: 0.9;
-      pointer-events: none;
-      z-index: 3;
-      transition: opacity 0.45s ease, transform 0.45s ease;
-    }
-
-    #legend.hidden {
-      opacity: 0;
-      transform: translateY(-20px);
-    }
-
-    @keyframes pulse {
-      0%   { transform: scale(1); opacity: 0.7; }
-      50%  { transform: scale(1.6); opacity: 1; }
-      100% { transform: scale(1); opacity: 0.7; }
-    }
-  </style>
+  <meta charset="UTF-8" />
+  <title>Почему люди уезжают из Арктики?</title>
+  <link rel="stylesheet" href="/static/style.css" />
 </head>
 
 <body>
 
-  <!-- ТЁМНОЕ СЕВЕРНОЕ СИЯНИЕ -->
+  <!-- СЕВЕРНОЕ СИЯНИЕ -->
   <canvas id="auroraCanvas"></canvas>
 
-  <!-- ЛЕГЕНДА (точно как справа) -->
-  <object id="legend" type="image/svg+xml" data="/static/Group 1.svg"></object>
+  <!-- ЛЕГЕНДА -->
+  <img id="legend" src="/static/Group1.svg" alt="Легенда">
 
-  <!-- ПЕРВАЯ КАРТА (та же) -->
-  <object id="map" type="image/svg+xml"
-          data="/static/Карта_1_pora_data-dataframe.svg"></object>
+  <!-- КАРТА -->
+  <object id="map" type="image/svg+xml" data="/static/Карта_1_pora_data-dataframe.svg"></object>
 
+  <!-- ТЕКСТ -->
+  <div class="info-text">
+    В некоторых местах запятая поставлена иначе.<br>
+    Люди уезжают.<br><br>
+
+    Становится меньше света,<br>
+    меньше голосов,<br>
+    меньше детей в школах.
+  </div>
+
+  <!-- СКРИПТЫ -->
+  <script src="/static/script.js"></script>
+
+  <!-- СЕВЕРНОЕ СИЯНИЕ — ТЕМНЕЕ, КАК ТЫ ПРОСИЛ -->
   <script>
-  // =============================
-  // ГРУСТНОЕ ТЁМНОЕ СИЯНИЕ (АРКТИКА, НОЧЬ)
-  // =============================
+    const canvas = document.getElementById("auroraCanvas");
+    const ctx = canvas.getContext("2d");
 
-  const canvas = document.getElementById("auroraCanvas");
-  const ctx = canvas.getContext("2d");
+    function resize() {
+      canvas.width = innerWidth;
+      canvas.height = innerHeight;
+    }
+    resize();
+    window.addEventListener("resize", resize);
 
-  let mouseX = 0;
-  let mouseY = 0;
+    let t = 0;
+    let mouseX = 0, mouseY = 0;
 
-  window.addEventListener("mousemove", e => {
-    mouseX = e.clientX / innerWidth;
-    mouseY = e.clientY / innerHeight;
-  });
-
-  function resize() {
-    canvas.width = innerWidth;
-    canvas.height = innerHeight;
-  }
-  resize();
-  window.addEventListener("resize", resize);
-
-  let t = 0;
-
-  /* БОЛЕЕ ТЁМНОЕ, ХОЛОДНОЕ СИЯНИЕ */
-  const clouds = [
-    { color: "rgba(0, 60, 100, 0.25)", size: 520 },
-    { color: "rgba(0, 30, 70, 0.22)", size: 600 },
-    { color: "rgba(40, 80, 110, 0.20)", size: 680 },
-    { color: "rgba(0, 120, 200, 0.17)", size: 540 },
-    { color: "rgba(0, 200, 255, 0.14)", size: 800 }
-  ];
-
-  function drawAurora() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    // ГЛУБОКОЕ НЕБО
-    const bg = ctx.createLinearGradient(0, 0, 0, canvas.height);
-    bg.addColorStop(0, "#030914");
-    bg.addColorStop(1, "#08111F");
-    ctx.fillStyle = bg;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    // ОБЛАКА СИЯНИЯ
-    clouds.forEach((c, i) => {
-      const x =
-        canvas.width *
-        (0.3 + 0.4 * Math.sin(t / (320 + i * 60)) + (mouseX - 0.5) * 0.15);
-
-      const y =
-        canvas.height *
-        (0.4 + 0.3 * Math.cos(t / (390 + i * 55)) + (mouseY - 0.5) * 0.15);
-
-      const radius = c.size + Math.sin(t / (110 + i * 30)) * 30;
-
-      const grad = ctx.createRadialGradient(x, y, 0, x, y, radius);
-      grad.addColorStop(0, c.color);
-      grad.addColorStop(1, "transparent");
-
-      ctx.globalCompositeOperation = "lighter";
-      ctx.fillStyle = grad;
-      ctx.beginPath();
-      ctx.arc(x, y, radius, 0, Math.PI * 2);
-      ctx.fill();
+    window.addEventListener("mousemove", e => {
+      mouseX = e.clientX / innerWidth;
+      mouseY = e.clientY / innerHeight;
     });
 
-    ctx.globalCompositeOperation = "source-over";
+    const clouds = [
+      { color: "rgba(120,180,255,0.18)", size: 450 },
+      { color: "rgba(80,140,220,0.22)", size: 520 },
+      { color: "rgba(60,120,200,0.18)", size: 580 },
+      { color: "rgba(150,110,255,0.14)", size: 500 }
+    ];
 
-    t += 1;
-    requestAnimationFrame(drawAurora);
-  }
+    function drawAurora() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  drawAurora();
+      // ТЕМНЫЙ ФОН КАК НА ПРАВОМ СЦЕНАРИИ
+      let bg = ctx.createLinearGradient(0, 0, 0, canvas.height);
+      bg.addColorStop(0, "#322C55");
+      bg.addColorStop(1, "#241F3D");
+      ctx.fillStyle = bg;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  // =============================
-  // ПУЛЬСАЦИЯ (та же логика, пока отключена)
-  // =============================
+      clouds.forEach((c, i) => {
+        const x = canvas.width * (0.35 + 0.35 * Math.sin(t / (260 + i * 40)) + (mouseX - 0.5) * 0.2);
+        const y = canvas.height * (0.42 + 0.28 * Math.cos(t / (280 + i * 50)) + (mouseY - 0.5) * 0.2);
+        const r = c.size + Math.sin(t / (90 + i * 25)) * 35;
 
-  // =============================
-  // ЛЕГЕНДА — исчезает вниз, появляется вверх
-  // =============================
-  const legend = document.getElementById("legend");
-  let lastScroll = 0;
+        const g = ctx.createRadialGradient(x, y, 0, x, y, r);
+        g.addColorStop(0, c.color);
+        g.addColorStop(1, "transparent");
 
-  window.addEventListener("scroll", () => {
-    const current = scrollY;
+        ctx.globalCompositeOperation = "lighter";
+        ctx.fillStyle = g;
+        ctx.beginPath();
+        ctx.arc(x, y, r, 0, Math.PI * 2);
+        ctx.fill();
+      });
 
-    if (current > lastScroll + 20) {
-      legend.classList.add("hidden");
-    } else if (current < lastScroll - 20) {
-      legend.classList.remove("hidden");
+      ctx.globalCompositeOperation = "source-over";
+      t++;
+      requestAnimationFrame(drawAurora);
     }
 
-    lastScroll = current;
-  });
+    drawAurora();
+  </script>
+
+  <!-- ПОВЕДЕНИЕ ЛЕГЕНДЫ (ИСКАЗАНИЕ ПРИ СКРОЛЛЕ) -->
+  <script>
+    const legend = document.getElementById("legend");
+    let lastScroll = 0;
+
+    window.addEventListener("scroll", () => {
+      const current = scrollY;
+
+      if (current > lastScroll + 20) {
+        legend.classList.add("hidden");
+      }
+      else if (current < lastScroll - 20) {
+        legend.classList.remove("hidden");
+      }
+
+      lastScroll = current;
+    });
   </script>
 
 </body>

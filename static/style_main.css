@@ -66,3 +66,48 @@ body {
     color: rgba(255, 255, 255, 0.55);  /* красивый полупрозрачный серый */
 }
 
+
+.footnote {
+    position: fixed;
+    bottom: 20px;
+    left: 24px;
+    width: 360px;
+
+    font-family: "Ledger", serif;   /* твой серый текст */
+    font-size: 14px;
+    line-height: 1.45;
+    color: rgba(255, 255, 255, 0.55);  /* мягкий серый */
+
+    z-index: 1000;
+    pointer-events: none; /* чтобы не мешать кликам по карте */
+
+    backdrop-filter: blur(2px);       /* лёгкое смягчение фона */
+}
+
+.footnote-right {
+    position: fixed;
+    bottom: 20px;
+    right: 60px;
+    width: 360px;
+
+    font-family: "Ledger", serif;
+    font-size: 14px;
+    line-height: 1.45;
+    color: rgba(255, 255, 255, 0.55);
+    text-align: right;
+
+    z-index: 1000;
+    pointer-events: none;
+    backdrop-filter: blur(2px);
+}
+
+.footnote-right a {
+    color: rgba(255, 255, 255, 0.55);
+    text-decoration: none;
+    pointer-events: all;
+}
+
+.footnote-right a:hover {
+    text-decoration: underline;
+}
+

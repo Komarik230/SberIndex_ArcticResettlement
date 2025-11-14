@@ -35,7 +35,7 @@ canvas#auroraCanvas {
 #legend {
   position: fixed;
   left: 24px;
-  top: 24px;
+  top: 300px;
     width: 420px !important;
     height: auto !important;
     max-width: none !important;
@@ -61,23 +61,6 @@ canvas#auroraCanvas {
   display: block;
 }
 
-/* ============================
-   ЛЕГЕНДА
-============================ */
-#legend {
-  position: fixed;
-  left: 24px;
-  top: 24px;
-  width: 180px;
-  opacity: 1;
-  z-index: 10;
-  transition: opacity 0.3s ease;
-  pointer-events: none;
-}
-
-#legend.hidden {
-  opacity: 0;
-}
 
 /* ============================
    ТЕКСТ
@@ -206,4 +189,19 @@ canvas#auroraCanvas {
     border-color: rgba(255, 255, 255, 0.6);
     transform: translateY(-2px);
     box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+}
+
+/* Заголовок в правом сценарии */
+.scenario-title {
+    font-family: 'Druk';
+    color: #ffffff;
+    font-size: 62px;
+    line-height: 1.1;
+    letter-spacing: 0.02em;
+    text-align: center;
+
+    margin: 140px auto 80px; /* Отступ сверху и снизу */
+    width: 100%;
+    z-index: 5;
+    position: relative;
 }

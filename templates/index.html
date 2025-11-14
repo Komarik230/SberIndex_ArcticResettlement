@@ -1,53 +1,78 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8">
+    <title>АРКТИКА</title>
+
+    <!-- Подключаем стили стартовой страницы -->
     <link rel="stylesheet" href="/static/style_main.css">
+
+    <!-- Подключаем JS -->
     <script defer src="/static/script.js"></script>
-    <title>Запятая</title>
 </head>
 
 <body>
+
 <div class="container">
 
+    <!-- Главный заголовок Druk -->
     <div class="text-block">
-        <div class="line">АРКТИКА.</div>
-
         <div class="line">
-            Уехать (<span class="comma" id="comma-left">,</span>) нельзя (<span class="comma" id="comma-right">,</span>) остаться.
+            АРКТИКА.
         </div>
 
-        <div class="subtitle">Вставьте запятую.<br>Ваш выбор — ваш путь.</div>
+        <div class="line">
+            Уехать (<span class="comma" id="comma-left">,</span>)
+            нельзя(<span class="comma" id="comma-right">,</span>)
+            остаться.
+        </div>
+    </div>
+
+    <!-- Подпись Ledger (серая) -->
+    <div class="subtitle">
+        Выберите запятую. Ваш выбор — ваш путь.
     </div>
 
 </div>
 
+<div class="footnote">
+    В основу исследования легли 128 малых населённых пунктов Арктики
+    с населением от 1000 до 25 000 человек по данным переписи 2021 года.
+    Критерии отбора и анализ представлены в Индексе устойчивого развития
+    и качества жизни малых населённых пунктов АЗРФ (ПОРА, 2025).
+</div>
+
+<div class="footnote-right">
+  Ссылка на код проекта:<br>
+  <a href="https://github.com/Komarik230/SberIndex_ArcticResettlement" target="_blank">
+      github.com/Komarik230/SberIndex_ArcticResettlement
+  </a>
+</div>
+
+<!-- Смена фона при наведении -->
 <script>
-  const body = document.body;
-  const leftComma = document.getElementById('comma-left');
-  const rightComma = document.getElementById('comma-right');
+    const body = document.body;
+    const leftComma = document.getElementById("comma-left");
+    const rightComma = document.getElementById("comma-right");
 
-  const defaultBg = "#322C55";     // стартовый фон
-  const leftBg = "#2C2729";        // фон при наведении на левую запятую
-  const rightBg = "#9CF4EE";       // фон при наведении на правую запятую
+    const defaultBg = "#322C55";
+    const leftBg = "#2C2729";
+    const rightBg = "#9CF4EE";
 
-  // ЛЕВАЯ
-  leftComma.addEventListener("mouseenter", () => {
-    body.style.background = leftBg;
-  });
+    leftComma.addEventListener("mouseenter", () => body.style.background = leftBg);
+    leftComma.addEventListener("mouseleave", () => body.style.background = defaultBg);
 
-  leftComma.addEventListener("mouseleave", () => {
-    body.style.background = defaultBg;
-  });
-
-  // ПРАВАЯ
-  rightComma.addEventListener("mouseenter", () => {
-    body.style.background = rightBg;
-  });
-
-  rightComma.addEventListener("mouseleave", () => {
-    body.style.background = defaultBg;
-  });
+    rightComma.addEventListener("mouseenter", () => body.style.background = rightBg);
+    rightComma.addEventListener("mouseleave", () => body.style.background = defaultBg);
 </script>
+
+<!-- Переходы по запятым -->
+<script>
+    leftComma.onclick = () => window.location.href = "/scenario_left.html";
+    rightComma.onclick = () => window.location.href = "/scenario_right.html";
+</script>
+
+
 </body>
 </html>
