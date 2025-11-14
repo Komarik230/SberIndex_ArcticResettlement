@@ -5,7 +5,6 @@ html, body {
   margin: 0;
   padding: 0;
   width: 100%;
-  min-height: 200vh;
   overflow-x: hidden;
   background:  #322C55;
   color: white;
@@ -36,30 +35,26 @@ canvas#auroraCanvas {
   position: fixed;
   left: 24px;
   top: 300px;
-    width: 420px !important;
-    height: auto !important;
-    max-width: none !important;
-    max-height: none !important;
-  opacity: 1;
-  transition: opacity 0.45s ease;
-  z-index: 9999;
+
+  transform: translateZ(0);    /* 🔥 убирает смещения */
+  will-change: transform;      /* 🔥 фиксирует слой */
+
+  z-index: 999999999 !important; /* 🔥 выше ВСЕГО */
   pointer-events: none;
+
+  width: 420px !important;
+  height: auto !important;
+  opacity: 1;
+  transition: opacity .35s ease;
 }
+
 
 #legend.hidden {
-  opacity: 0;
+  opacity: 0;                /* скрываем через прозрачность */
 }
 
 
-/* ============================
-   КАРТА
-============================ */
-#map {
-  width: 100vw;
-  height: 100vh;
-  z-index: 2;
-  display: block;
-}
+
 
 
 /* ============================
@@ -155,15 +150,6 @@ canvas#auroraCanvas {
     z-index: 3;
 }
 
-#map {
-    width: 100vw;
-    height: 100vh;
-    display: block;
-    position: relative;
-    z-index: 1;
-    pointer-events: none; /* чтобы карта не мешала прокрутке */
-}
-
 
 .switch-button {
     display: block;
@@ -204,4 +190,76 @@ canvas#auroraCanvas {
     width: 100%;
     z-index: 5;
     position: relative;
+}
+
+
+.hero {
+    position: relative;
+    width: 100%;
+    height: calc(100vh + 300px);  /* ← ВМЕЩАЕМ карту */
+    overflow: hidden;
+}
+
+/* Сияние */
+.hero #auroraCanvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.hero #map {
+    position: absolute;
+    top: 300px;      /* ← смещение вниз */
+    left: 0;
+    width: 100%;
+    height: 100vh;   /* ← ПОЛНЫЙ РАЗМЕР КАРТЫ */
+    z-index: 1;
+    pointer-events: none;
+    display: block;
+}
+
+
+
+/* Заголовок */
+.hero .scenario-title {
+    position: absolute;
+    top: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;          /* над картой, под легендой */
+    margin: 0;
+}
+
+/* Легенда */
+.hero #legend {
+    position: absolute;
+    left: 24px;
+    top: 350px;
+    width: 420px;
+    z-index: 3;          /* 🔥 всегда выше карты и заголовка */
+    pointer-events: none;
+    opacity: 1;
+    transition: opacity .3s ease;
+}
+
+
+.hero .scenario-subtitle {
+    position: absolute;
+    top: 170px;              /* ← СДВИГ ВНИЗ ПОД ЗАГОЛОВОК */
+    left: 50%;
+    transform: translateX(-50%);
+
+    font-family: 'Ledger', serif;
+    font-size: 22px;
+    line-height: 1.45;
+    color: rgba(255, 255, 255, 0.75);
+    text-align: center;
+
+    max-width: 720px;
+    padding: 0 22px;
+
+    z-index: 3;             /* ниже легенды, но выше карты */
 }

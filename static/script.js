@@ -72,23 +72,3 @@ track.addEventListener('touchend', (e) => {
   }
 });
 
-
-
-const legend = document.getElementById("legend");
-let lastScroll = 0;
-
-window.addEventListener("scroll", () => {
-  const current = window.scrollY;
-
-  // прячем, если пользователь скроллит ВНИЗ
-  if (current > lastScroll + 10) {
-    legend.classList.add("hidden");
-  }
-
-  // показываем, если пользователь скроллит ВВЕРХ
-  if (current < lastScroll - 10) {
-    legend.classList.remove("hidden");
-  }
-
-  lastScroll = current;
-});

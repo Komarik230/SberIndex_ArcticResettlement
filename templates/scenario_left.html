@@ -4,22 +4,30 @@
     <meta charset="UTF-8">
     <title>Почему люди уезжают из Арктики?</title>
 
-    <!-- Общий стиль, где уже есть legend + legend.hidden -->
+    <!-- Общий стиль -->
     <link rel="stylesheet" href="/static/style.css">
 </head>
 
 <body>
-<!-- Заголовок -->
-<h1 class="scenario-title">Уехать, нельзя остаться</h1>
+
 
 <!-- СЕВЕРНОЕ СИЯНИЕ -->
 <canvas id="auroraCanvas"></canvas>
 
-<!-- ЛЕГЕНДА — ДОЛЖЕН БЫТЬ ТОЧНО ТАКОЙ ЖЕ ID -->
-<img id="legend" src="/static/Group1.svg" alt="legend">
+<div class="hero">
+    <object id="map" type="image/svg+xml" data="/static/Карта_1_pora_data-dataframe.svg"></object>
 
-<!-- КАРТА -->
-<object id="map" type="image/svg+xml" data="/static/Карта_1_pora_data-dataframe.svg"></object>
+    <h1 class="scenario-title">Уехать, нельзя остаться</h1>
+
+    <h4 class="scenario-subtitle">
+        Вы оказались в большинстве, сделав такой выбор.
+        Многие, как и вы, решили уехать,
+        и 94 из 128 населённых пунктов Арктики опустели. </h4>
+
+    <img id="legend" src="/static/Group1.svg" alt="legend">
+
+</div>
+
 
 <!-- ТЕКСТ -->
 <div class="info-text">
@@ -51,7 +59,7 @@
         </div>
 
         <div class="slide">
-            <img src="/static/Frame 12.png" alt="">
+            <img src="/static/Frame12.svg" alt="">
         </div>
 
     </div>
@@ -69,106 +77,97 @@
     Посмотреть другую сторону Арктики
 </a>
 
-<!-- JS-ЛОГИКА -->
+
 <script src="/static/script.js"></script>
 
-<!-- СЕВЕРНОЕ СИЯНИЕ -->
+
 <script>
-    const canvas = document.getElementById("auroraCanvas");
-    const ctx = canvas.getContext("2d");
+const legend = document.getElementById("legend");
+const map = document.getElementById("map");
 
-    function resize() {
-        canvas.width = innerWidth;
-        canvas.height = innerHeight;
+function updateLegendVisibility() {
+    if (!legend || !map) return;
+
+    const rect = map.getBoundingClientRect();
+    const windowHeight = window.innerHeight;
+
+    // карта пересекается с экраном? (мы на "экране карты")
+    const mapInView = rect.top < windowHeight && rect.bottom > 0;
+
+    if (mapInView) {
+        // на первом экране карты — легенда ПРИСУТСТВУЕТ
+        legend.classList.remove("hidden");
+    } else {
+        // как только карту ПРОКРУТИЛИ выше — легенды больше нет
+        legend.classList.add("hidden");
     }
-    resize();
-    window.addEventListener("resize", resize);
+}
 
-    let t = 0;
-    const clouds = [
-        { color: "rgba(255,120,160,0.20)", size: 480 },
-        { color: "rgba(120,200,255,0.25)", size: 560 },
-        { color: "rgba(120,255,190,0.20)", size: 620 },
-        { color: "rgba(180,140,255,0.18)", size: 520 },
-        { color: "rgba(255,255,180,0.16)", size: 750 }
-    ];
+window.addEventListener("scroll", updateLegendVisibility);
+window.addEventListener("resize", updateLegendVisibility);
+window.addEventListener("load", updateLegendVisibility);
+</script>
 
-    let mouseX = 0, mouseY = 0;
-    window.addEventListener("mousemove", e => {
-        mouseX = e.clientX / innerWidth;
-        mouseY = e.clientY / innerHeight;
+
+
+<!-- ====== JS: северное сияние ====== -->
+<script>
+const canvas = document.getElementById("auroraCanvas");
+const ctx = canvas.getContext("2d");
+
+function resize() {
+    canvas.width = innerWidth;
+    canvas.height = innerHeight;
+}
+resize();
+window.addEventListener("resize", resize);
+
+let t = 0;
+const clouds = [
+    { color: "rgba(255,120,160,0.20)", size: 480 },
+    { color: "rgba(120,200,255,0.25)", size: 560 },
+    { color: "rgba(120,255,190,0.20)", size: 620 },
+    { color: "rgba(180,140,255,0.18)", size: 520 },
+    { color: "rgba(255,255,180,0.16)", size: 750 }
+];
+
+let mouseX = 0, mouseY = 0;
+window.addEventListener("mousemove", e => {
+    mouseX = e.clientX / innerWidth;
+    mouseY = e.clientY / innerHeight;
+});
+
+function drawAurora() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    const bg = ctx.createLinearGradient(0,0,0,canvas.height);
+    bg.addColorStop(0, "#322C55");
+    bg.addColorStop(1, "#241F3D");
+    ctx.fillStyle = bg;
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+
+    clouds.forEach((c,i)=>{
+        const x = canvas.width * (0.3 + 0.4 * Math.sin(t/(260+i*40)) + (mouseX-0.5)*0.25);
+        const y = canvas.height * (0.4 + 0.3 * Math.cos(t/(280+i*50)) + (mouseY-0.5)*0.25);
+        const r = c.size + Math.sin(t/(90+i*25))*35;
+
+        const g = ctx.createRadialGradient(x,y,0,x,y,r);
+        g.addColorStop(0, c.color);
+        g.addColorStop(1, "transparent");
+
+        ctx.globalCompositeOperation = "lighter";
+        ctx.beginPath();
+        ctx.fillStyle = g;
+        ctx.arc(x,y,r,0,Math.PI*2);
+        ctx.fill();
     });
 
-    function drawAurora() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.globalCompositeOperation = "source-over";
+    t++;
+    requestAnimationFrame(drawAurora);
+}
 
-        let bg = ctx.createLinearGradient(0,0,0,canvas.height);
-        bg.addColorStop(0, "#322C55");
-        bg.addColorStop(1, "#241F3D");
-
-        ctx.fillStyle = bg;
-        ctx.fillRect(0,0,canvas.width,canvas.height);
-
-        clouds.forEach((c,i)=>{
-            const x = canvas.width * (0.3 + 0.4 * Math.sin(t/(260+i*40)) + (mouseX-0.5)*0.25);
-            const y = canvas.height * (0.4 + 0.3 * Math.cos(t/(280+i*50)) + (mouseY-0.5)*0.25);
-            const r = c.size + Math.sin(t/(90+i*25))*35;
-
-            const g = ctx.createRadialGradient(x,y,0,x,y,r);
-            g.addColorStop(0, c.color);
-            g.addColorStop(1, "transparent");
-
-            ctx.globalCompositeOperation = "lighter";
-            ctx.beginPath();
-            ctx.fillStyle = g;
-            ctx.arc(x,y,r,0,Math.PI*2);
-            ctx.fill();
-        });
-
-        ctx.globalCompositeOperation = "source-over";
-        t++;
-        requestAnimationFrame(drawAurora);
-    }
-
-    drawAurora();
-</script>
-
-<script>
-const track = document.querySelector(".slider-track");
-const btnLeft = document.querySelector(".slider-btn.left");
-const btnRight = document.querySelector(".slider-btn.right");
-
-btnLeft.addEventListener("click", () => {
-    track.scrollBy({ left: -window.innerWidth * 0.75, behavior: "smooth" });
-});
-
-btnRight.addEventListener("click", () => {
-    track.scrollBy({ left: window.innerWidth * 0.75, behavior: "smooth" });
-});
-</script>
-
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-    const legend = document.getElementById("legend");
-    const map = document.getElementById("map");
-
-    function updateLegendVisibility() {
-        const mapRect = map.getBoundingClientRect();
-
-        const mapVisible =
-            mapRect.top < window.innerHeight * 0.6 &&   // верх карты в зоне видимости
-            mapRect.bottom > window.innerHeight * 0.2;  // низ карты тоже ближе к экрану
-
-        if (mapVisible) {
-            legend.classList.remove("hidden"); // показать
-        } else {
-            legend.classList.add("hidden"); // скрыть, если карты нет в зоне экрана
-        }
-    }
-
-    window.addEventListener("scroll", updateLegendVisibility);
-    updateLegendVisibility();
-});
+drawAurora();
 </script>
 
 </body>

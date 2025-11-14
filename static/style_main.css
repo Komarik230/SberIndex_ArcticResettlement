@@ -50,7 +50,7 @@ body {
 }
 
 #comma-left:hover {
-    color: #2C2729; /* тёмный */
+    color: #B4B4B4; /* тёмный */
 }
 
 #comma-right:hover {
@@ -60,7 +60,7 @@ body {
 /* НИЖНЯЯ НАДПИСЬ (серый Ledger) */
 .subtitle {
     font-family: 'Ledger';
-    font-size: 20px;
+    font-size: 36px;
     line-height: 1.4;
     margin-top: 30px;
     color: rgba(255, 255, 255, 0.55);  /* красивый полупрозрачный серый */
@@ -111,3 +111,18 @@ body {
     text-decoration: underline;
 }
 
+.comma {
+    display: inline-block;
+    font-family: 'Druk';
+    font-size: 80px;
+    cursor: pointer;
+    transition: color 0.25s ease;
+    animation: pulse 1.8s infinite ease-in-out;
+}
+
+/* Пульсация */
+@keyframes pulse {
+    0%   { transform: scale(1); opacity: 1; }
+    50%  { transform: scale(1.28); opacity: 1; }
+    100% { transform: scale(1); opacity: 1; }
+}
