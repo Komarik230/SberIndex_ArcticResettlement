@@ -121,7 +121,7 @@ canvas#auroraCanvas {
   opacity: 1;
   transition: opacity 0.3s ease;   /* ← плавное исчезание */
 
-  background: rgba(255,255,255,0.18);
+  background: rgba(249, 79, 13);
   border: none;
   color: white;
   font-family: 'Druk';
