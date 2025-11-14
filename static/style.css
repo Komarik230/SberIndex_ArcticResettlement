@@ -117,6 +117,10 @@ canvas#auroraCanvas {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
+
+  opacity: 1;
+  transition: opacity 0.3s ease;   /* ← плавное исчезание */
+
   background: rgba(255,255,255,0.18);
   border: none;
   color: white;
@@ -127,6 +131,14 @@ canvas#auroraCanvas {
   backdrop-filter: blur(6px);
   z-index: 5;
 }
+
+/* Когда кнопка отключена */
+.slider-btn.disabled {
+  opacity: 0;               /* ← сделать невидимой */
+  pointer-events: none;     /* ← и чтобы по ней нельзя было нажать */
+}
+
+
 
 .slider-btn.left {
   left: 20px;

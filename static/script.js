@@ -42,7 +42,23 @@ let index = 0;
 
 function updateSlider() {
   track.style.transform = `translateX(${-index * 100}vw)`;
+
+  // левая кнопка — нет на первом слайде
+  if (index === 0) {
+    btnLeft.classList.add("disabled");
+  } else {
+    btnLeft.classList.remove("disabled");
+  }
+
+  // правая кнопка — нет на последнем слайде
+  if (index === slides.length - 1) {
+    btnRight.classList.add("disabled");
+  } else {
+    btnRight.classList.remove("disabled");
+  }
 }
+
+
 
 btnLeft.addEventListener('click', () => {
   index = Math.max(0, index - 1);
@@ -72,3 +88,5 @@ track.addEventListener('touchend', (e) => {
   }
 });
 
+
+updateSlider();
