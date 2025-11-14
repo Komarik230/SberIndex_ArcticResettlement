@@ -29,3 +29,66 @@ document.addEventListener("DOMContentLoaded", () => {
         document.body.classList.remove("right-hover");
     });
 });
+
+
+
+// ===== ГОРИЗОНТАЛЬНЫЙ КАРТОЧНЫЙ СЛАЙДЕР =====
+const track = document.querySelector('.slider-track');
+const slides = document.querySelectorAll('.slide');
+const btnLeft = document.querySelector('.slider-btn.left');
+const btnRight = document.querySelector('.slider-btn.right');
+
+let index = 0;
+
+function updateSlider() {
+  track.style.transform = `translateX(${-index * 100}vw)`;
+}
+
+btnLeft.addEventListener('click', () => {
+  index = Math.max(0, index - 1);
+  updateSlider();
+});
+
+btnRight.addEventListener('click', () => {
+  index = Math.min(slides.length - 1, index + 1);
+  updateSlider();
+});
+
+// свайп на тачпадах и телефонах
+let startX = 0;
+track.addEventListener('touchstart', (e) => {
+  startX = e.touches[0].clientX;
+});
+
+track.addEventListener('touchend', (e) => {
+  let endX = e.changedTouches[0].clientX;
+  if (startX - endX > 50) {
+    index = Math.min(slides.length - 1, index + 1);
+    updateSlider();
+  }
+  if (endX - startX > 50) {
+    index = Math.max(0, index - 1);
+    updateSlider();
+  }
+});
+
+
+
+const legend = document.getElementById("legend");
+let lastScroll = 0;
+
+window.addEventListener("scroll", () => {
+  const current = window.scrollY;
+
+  // прячем, если пользователь скроллит ВНИЗ
+  if (current > lastScroll + 10) {
+    legend.classList.add("hidden");
+  }
+
+  // показываем, если пользователь скроллит ВВЕРХ
+  if (current < lastScroll - 10) {
+    legend.classList.remove("hidden");
+  }
+
+  lastScroll = current;
+});

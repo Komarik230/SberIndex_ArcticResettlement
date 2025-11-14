@@ -1,0 +1,68 @@
+@font-face {
+    font-family: 'Druk';
+    src: url('/static/fonts/DrukTextWideCyTT-Heavy.ttf') format('truetype');
+    font-weight: 700;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Ledger';
+    src: url('/static/fonts/Ledger-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+}
+
+
+/* ФОН */
+body {
+    margin: 0;
+    padding: 0;
+    background: #322C55;
+    font-family: 'Druk', sans-serif;
+    color: white;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background 0.35s ease;
+}
+
+/* КОНТЕЙНЕР */
+.container {
+    text-align: center;
+}
+
+/* ЗАГОЛОВОК (DRUK) */
+.text-block .line {
+    font-family: 'Druk'; /* твой Duke */
+    font-size: 64px;
+    margin-bottom: 20px;
+    line-height: 1.1;
+    color: white; /* чисто белый */
+}
+
+/* ЗАПЯТЫЕ */
+.comma {
+    font-family: 'Druk';
+    font-size: 80px;
+    cursor: pointer;
+    transition: color 0.25s ease;
+}
+
+#comma-left:hover {
+    color: #2C2729; /* тёмный */
+}
+
+#comma-right:hover {
+    color: #9CF4EE; /* твой голубой */
+}
+
+/* НИЖНЯЯ НАДПИСЬ (серый Ledger) */
+.subtitle {
+    font-family: 'Ledger';
+    font-size: 20px;
+    line-height: 1.4;
+    margin-top: 30px;
+    color: rgba(255, 255, 255, 0.55);  /* красивый полупрозрачный серый */
+}
+

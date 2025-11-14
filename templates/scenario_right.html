@@ -2,282 +2,134 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Остаться — карта (северное сияние)</title>
+    <title>Почему люди остаются в Арктике?</title>
 
-    <!-- ШРИФТЫ -->
-    <style>
-        @font-face {
-          font-family: 'Druk';
-          src: url('/static/fonts/DrukTextWideCyTT-Heavy.ttf') format('truetype');
-          font-weight: 900;
-        }
+    <link rel="stylesheet" href="/static/style.css">
 
-        html, body {
-          margin: 0;
-          padding: 0;
-          width: 100%;
-          height: 250vh; /* больше места под переходный текст */
-          overflow-x: hidden;
-          background: #0a1e3d; /* светлый северный фон */
-        }
-
-        canvas#auroraCanvas {
-          position: fixed;
-          inset: 0;
-          width: 100vw;
-          height: 100vh;
-          z-index: 1;
-          pointer-events: none;
-        }
-
-        object#map {
-          width: 100vw;
-          height: 100vh;
-          z-index: 2;
-          position: relative;
-          display: block;
-        }
-
-        /* ЛЕГЕНДА */
-        #legend {
-          position: fixed;
-          left: 24px;
-          top: 24px;
-          width: 180px;
-          opacity: 0.9;
-          pointer-events: none;
-          z-index: 3;
-          transition: opacity 0.45s ease, transform 0.45s ease;
-        }
-        #legend.hidden {
-          opacity: 0;
-          transform: translateY(-20px);
-        }
-
-        /* ПУЛЬСАЦИЯ ТОЧЕК */
-        @keyframes pulse {
-          0%   { transform: scale(1); opacity: 0.7; }
-          50%  { transform: scale(1.5); opacity: 1; }
-          100% { transform: scale(1); opacity: 0.7; }
-        }
-
-        /* ПЕРЕХОДНЫЙ ТЕКСТ */
-        #transitionText {
-          width: 100%;
-          text-align: center;
-          margin-top: 120px;
-          font-family: 'Druk', sans-serif;
-          font-size: 44px;
-          font-weight: 900;
-          line-height: 1.25;
-          letter-spacing: 0.5px;
-          color: white;
-          text-transform: uppercase;
-          z-index: 4;
-          position: relative;
-          pointer-events: none;
-        }
-
-        #afterImage {
-          width: 100%;
-          max-width: 1100px;
-          display: block;
-
-          /* 🔥 одинаковые отступы сверху и снизу */
-          margin: 120px auto 120px;
-
-          position: relative;
-          z-index: 2;
-        }
-    </style>
 </head>
 
 <body>
 
-<!-- СИЯНИЕ -->
+<!-- СЕВЕРНОЕ СИЯНИЕ -->
 <canvas id="auroraCanvas"></canvas>
 
 <!-- ЛЕГЕНДА -->
-<object id="legend" type="image/svg+xml" data="/static/Group 1.svg"></object>
+<img id="legend" src="/static/Group1.svg">
 
 <!-- КАРТА -->
-<object id="map" type="image/svg+xml"
-        data="/static/Карта_1_pora_data-dataframe.svg"></object>
+<object id="map" type="image/svg+xml" data="/static/Карта_1_pora_data-dataframe.svg"></object>
 
-<!-- ПЕРЕХОДНЫЙ ТЕКСТ -->
-<div id="transitionText">
+<!-- ТЕКСТ -->
+<div class="info-text">
     Люди остаются в Арктике.<br>
-    Кто-то даже приезжает.<br>
-    <br>
+    Кто-то даже приезжает.<br><br>
+
     Почему?<br>
-    <br>
-    Ответов много.<br>
-    Но, может быть, важнее другое —<br>
-    понять, что объединяет те места, <br>
-    где жизнь не замерзает.<br>
+    Ответов много.<br><br>
+
+    Но, может быть, важнее понять, что объединяет места, где жизнь не замерзает.
+</div>
+<!-- СЛАЙДЕР -->
+<div class="slider-wrapper">
+
+    <button class="slider-btn left">←</button>
+
+    <div class="slider-track">
+
+        <!-- СЛАЙД 1 — Frame2 -->
+        <div class="slide">
+            <img src="/static/Frame2.svg" alt="кадр 1">
+        </div>
+
+        <!-- СЛАЙД 2 — Frame6 -->
+        <div class="slide">
+            <img src="/static/Frame6.svg" alt="кадр 2">
+        </div>
+
+        <!-- СЛАЙД 3 — Frame7 -->
+        <div class="slide">
+            <img src="/static/Frame7.svg" alt="кадр 3">
+        </div>
+
+    </div>
+
+    <button class="slider-btn right">→</button>
+
 </div>
 
+<!-- ИНФОГРАФИКА ПОСЛЕ СЛАЙДЕРА -->
+<img class="bottom-infographic"
+     src="/static/infographic_positive_1.svg"
+     alt="Инфографика">
+
+<a href="/scenario_left.html" class="switch-button">
+    Посмотреть обратную сторону Арктики
+</a>
 
 
-<object id="afterImage"
-        type="image/svg+xml"
-        data="/static/Frame2.svg"></object>
+<!-- СКРИПТЫ -->
+<script src="/static/script.js"></script>
 
+<!-- ВОЗВРАЩАЮ СИЯНИЕ -->
 <script>
-    // =============================
-    // МЫШЬ (движение влияет на сияние)
-    // =============================
-    let mouseX = 0;
-    let mouseY = 0;
-    window.addEventListener("mousemove", (e) => {
-      mouseX = e.clientX / innerWidth;
-      mouseY = e.clientY / innerHeight;
-    });
-
-    // =============================
-    // CANVAS — туманное северное сияние
-    // =============================
     const canvas = document.getElementById("auroraCanvas");
     const ctx = canvas.getContext("2d");
 
     function resize() {
-      canvas.width = innerWidth;
-      canvas.height = innerHeight;
+        canvas.width = innerWidth;
+        canvas.height = innerHeight;
     }
     resize();
     window.addEventListener("resize", resize);
 
     let t = 0;
-
     const clouds = [
-      { color: "rgba(255, 120, 160, 0.20)", size: 480 },
-      { color: "rgba(120, 200, 255, 0.25)", size: 560 },
-      { color: "rgba(120, 255, 190, 0.20)", size: 620 },
-      { color: "rgba(180, 140, 255, 0.18)", size: 520 },
-      { color: "rgba(255, 255, 180, 0.16)", size: 750 }
+      { color: "rgba(255,120,160,0.20)", size: 480 },
+      { color: "rgba(120,200,255,0.25)", size: 560 },
+      { color: "rgba(120,255,190,0.20)", size: 620 },
+      { color: "rgba(180,140,255,0.18)", size: 520 },
+      { color: "rgba(255,255,180,0.16)", size: 750 }
     ];
+
+    let mouseX = 0, mouseY = 0;
+    window.addEventListener("mousemove", e => {
+      mouseX = e.clientX / innerWidth;
+      mouseY = e.clientY / innerHeight;
+    });
 
     function drawAurora() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // ФОН
-      const bg = ctx.createLinearGradient(0, 0, 0, canvas.height);
-      bg.addColorStop(0, "#0b2a55");
-      bg.addColorStop(1, "#0f305a");
+      let bg = ctx.createLinearGradient(0,0,0,canvas.height);
+    bg.addColorStop(0, "#322C55");
+    bg.addColorStop(1, "#241F3D");
+
       ctx.fillStyle = bg;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillRect(0,0,canvas.width,canvas.height);
 
-      // ОБЛАКА СИЯНИЯ
-      clouds.forEach((c, i) => {
-        const x =
-          canvas.width *
-          (0.3 + 0.4 * Math.sin(t / (260 + i * 40)) + (mouseX - 0.5) * 0.25);
+      clouds.forEach((c,i)=>{
+        const x = canvas.width * (0.3 + 0.4 * Math.sin(t/(260+i*40)) + (mouseX-0.5)*0.25);
+        const y = canvas.height * (0.4 + 0.3 * Math.cos(t/(280+i*50)) + (mouseY-0.5)*0.25);
+        const r = c.size + Math.sin(t/(90+i*25))*35;
 
-        const y =
-          canvas.height *
-          (0.4 + 0.3 * Math.cos(t / (280 + i * 50)) + (mouseY - 0.5) * 0.25);
-
-        const radius = c.size + Math.sin(t / (90 + i * 25)) * 35;
-
-        const grad = ctx.createRadialGradient(x, y, 0, x, y, radius);
-        grad.addColorStop(0, c.color);
-        grad.addColorStop(1, "transparent");
+        const g = ctx.createRadialGradient(x,y,0,x,y,r);
+        g.addColorStop(0, c.color);
+        g.addColorStop(1, "transparent");
 
         ctx.globalCompositeOperation = "lighter";
-        ctx.fillStyle = grad;
+        ctx.fillStyle = g;
         ctx.beginPath();
-        ctx.arc(x, y, radius, 0, Math.PI * 2);
+        ctx.arc(x,y,r,0,Math.PI*2);
         ctx.fill();
       });
 
       ctx.globalCompositeOperation = "source-over";
-
-      t += 1;
+      t++;
       requestAnimationFrame(drawAurora);
     }
 
     drawAurora();
-
-    // =============================
-    // ПУЛЬСАЦИЯ ГОЛУБЫХ ТОЧЕК (rect) — РАБОЧАЯ
-    // =============================
-    window.addEventListener("load", () => {
-      const map = document.getElementById("map");
-
-      function startAnimation(svg) {
-        if (!svg) return;
-
-        // НАХОДИМ ВСЕ <rect> C НУЖНЫМИ ГОЛУБЫМИ ОТТЕНКАМИ
-        const dots = svg.querySelectorAll(`
-          rect[fill="#9CF4EE"], rect[fill="#A9DCCE"], rect[fill="#B7C5AE"],
-          rect[fill="#9cf4ee"], rect[fill="#a9dcce"], rect[fill="#b7c5ae"],
-          rect[style*="9CF4EE"], rect[style*="A9DCCE"], rect[style*="B7C5AE"],
-          rect[style*="9cf4ee"], rect[style*="a9dcce"], rect[style*="b7c5ae"],
-          rect[fill*="rgb(156"], rect[fill*="rgb(169"], rect[fill*="rgb(183"]
-        `);
-
-        dots.forEach(dot => {
-          let scale = 1;
-          let growing = true;
-
-          // центр масштабирования
-          const x = parseFloat(dot.getAttribute("x"));
-          const y = parseFloat(dot.getAttribute("y"));
-          const w = parseFloat(dot.getAttribute("width"));
-          const h = parseFloat(dot.getAttribute("height"));
-
-          dot.setAttribute(
-            "transform-origin",
-            `${x + w / 2} ${y + h / 2}`
-          );
-
-          function pulse() {
-            if (growing) {
-              scale += 0.01;
-              if (scale >= 1.45) growing = false;
-            } else {
-              scale -= 0.01;
-              if (scale <= 1) growing = true;
-            }
-
-            dot.setAttribute("transform", `scale(${scale})`);
-
-            requestAnimationFrame(pulse);
-          }
-
-          pulse();
-        });
-      }
-
-      // SVG уже загружен
-      if (map.contentDocument)
-        startAnimation(map.contentDocument);
-
-      // SVG догрузится позже
-      map.addEventListener("load", () =>
-        startAnimation(map.contentDocument)
-      );
-    });
-
-    // =============================
-    // ЛЕГЕНДА: исчезает вниз, появляется вверх
-    // =============================
-    const legend = document.getElementById("legend");
-    let lastScroll = 0;
-
-    window.addEventListener("scroll", () => {
-      const current = scrollY;
-
-      if (current > lastScroll + 20) {
-        legend.classList.add("hidden");
-      } else if (current < lastScroll - 20) {
-        legend.classList.remove("hidden");
-      }
-
-      lastScroll = current;
-    });
 </script>
-
 
 </body>
 </html>

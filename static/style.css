@@ -1,141 +1,209 @@
-/* ====== Подключение шрифтов ====== */
+/* ============================
+   ФОН + СЕВЕРНОЕ СИЯНИЕ
+============================ */
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 200vh;
+  overflow-x: hidden;
+  background:  #322C55;
+  color: white;
+}
+
+canvas#auroraCanvas {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ============================
+   ШРИФТЫ
+============================ */
 @font-face {
-    font-family: "Druk Text Wide Cy TT Heavy";
-    src: url("/static/fonts/DrukTextWideCyTT-Heavy.ttf") format("truetype");
-    font-weight: 900;
+  font-family: 'Druk';
+  src: url('/static/fonts/DrukTextWideCyTT-Heavy.ttf');
 }
 
 @font-face {
-    font-family: "Ledger";
-    src: url("/static/fonts/Ledger-Regular.ttf") format("truetype");
-    font-weight: 400;
+  font-family: 'Ledger';
+  src: url('/static/fonts/Ledger-Regular.ttf');
 }
 
-/* ====== Базовые стили ====== */
-body {
-    margin: 0;
-    background: #322C55; /* изменён фон */
-    color: white;
-    font-family: "Inter", sans-serif;
-    transition: background 0.4s;
-}
-
-body.cold {
-    background: #081427;
-}
-
-.container {
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.text-block {
-    text-align: center;
-    font-size: 2.4rem;
-    line-height: 1.6;
-}
-
-/* ====== Текст "АРКТИКА. Уехать, нельзя, остаться." ====== */
-.text-block .line:first-child {
-    font-family: "Druk Text Wide Cy TT Heavy", sans-serif;
-    font-weight: 900;
-    font-size: 3.2rem;
-    letter-spacing: 0.03em;
-    margin-bottom: 0.4em;
-}
-
-.text-block .line:nth-child(2) {
-    font-family: "Druk Text Wide Cy TT Heavy", sans-serif;
-    font-weight: 900;
-    font-size: 2.8rem;
-    line-height: 1.3;
-}
-
-/* ====== Запятые ====== */
-.comma {
-    cursor: pointer;
-    padding: 4px;
-    transition: color 0.2s, text-shadow 0.2s;
-}
-
-.comma:hover {
-    color: #8fdcff;
-    text-shadow: 0 0 12px #7dd0ff;
-}
-
-/* ====== Подзаголовок ====== */
-.subtitle {
-    margin-top: 28px;
-    font-family: "Ledger", serif;
-    font-size: 1.4rem;
-    line-height: 1.6;
-    opacity: 0.9;
-}
-
-/* ====== Дополнительные стили для сценариев ====== */
-.dark-bg {
-    background: #050914;
-    overflow: hidden;
-}
-
-.scene-container {
-    position: relative;
-    width: 100vw;
-    height: 100vh;
-}
-
-#mapCanvas {
-    width: 100%;
-    height: 100%;
-    display: block;
-}
-
-.scenario-text {
-    position: absolute;
-    bottom: 60px;
-    left: 60px;
-    color: #ffffff;
-    font-size: 1.8rem;
-    line-height: 1.5;
-    max-width: 450px;
-}
-
-.fade-in {
-    animation: fadeIn 2s ease forwards 1s;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to   { opacity: 1; transform: translateY(0); }
-}
-
-
-body.left-hover {
-    background: #2C2729; /* цвет при наведении на левую запятую */
-}
-
-body.right-hover {
-    background: #1677A8;
-    color: #000; /* чтобы текст оставался читаемым */
-    transition: background 0.4s, color 0.4s;
-}
 
 #legend {
   position: fixed;
-  right: 40px;       /* отступ от правого края */
-  bottom: 40px;      /* или top: 40px — если хочешь сверху */
-  width: 300px;      /* подбери под размер своей легенды */
-  height: auto;
-  z-index: 3;        /* выше карты и сияния */
-  opacity: 0.85;     /* лёгкая прозрачность, можно убрать */
-  pointer-events: none; /* чтобы не мешала кликам по карте */
+  left: 24px;
+  top: 24px;
+    width: 420px !important;
+    height: auto !important;
+    max-width: none !important;
+    max-height: none !important;
+  opacity: 1;
+  transition: opacity 0.45s ease;
+  z-index: 9999;
+  pointer-events: none;
+}
+
+#legend.hidden {
+  opacity: 0;
 }
 
 
-@keyframes pulse {
-  0%   { transform: scale(1); opacity: 0.7; }
-  50%  { transform: scale(1.6); opacity: 1; }
-  100% { transform: scale(1); opacity: 0.7; }
+/* ============================
+   КАРТА
+============================ */
+#map {
+  width: 100vw;
+  height: 100vh;
+  z-index: 2;
+  display: block;
+}
+
+/* ============================
+   ЛЕГЕНДА
+============================ */
+#legend {
+  position: fixed;
+  left: 24px;
+  top: 24px;
+  width: 180px;
+  opacity: 1;
+  z-index: 10;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+#legend.hidden {
+  opacity: 0;
+}
+
+/* ============================
+   ТЕКСТ
+============================ */
+.info-text {
+  font-family: 'Druk';
+  font-size: 40px;
+  line-height: 1.2;
+  max-width: 900px;
+  margin: 140px auto 80px;
+  text-align: center;
+  z-index: 3;
+  position: relative;
+  padding: 0 22px;
+}
+
+/* ============================
+   ИЗОБРАЖЕНИЕ ПОСЛЕ ТЕКСТА
+============================ */
+.after-text-image {
+  width: 80vw;
+  max-width: 900px;
+  display: block;
+  margin: 80px auto 100px;
+}
+
+/* ============================
+   СЛАЙДЕР
+============================ */
+.slider-wrapper {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  margin-bottom: 140px;
+  z-index: 3;
+}
+
+.slider-track {
+  display: flex;
+  transition: transform 0.6s ease;
+}
+
+.slide {
+  min-width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.slide img {
+  width: 80vw;
+  max-width: 900px;
+}
+
+/* ============================
+   КНОПКИ СЛАЙДЕРА
+============================ */
+.slider-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255,255,255,0.18);
+  border: none;
+  color: white;
+  font-family: 'Druk';
+  font-size: 34px;
+  padding: 14px 22px;
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+  z-index: 5;
+}
+
+.slider-btn.left {
+  left: 20px;
+}
+
+.slider-btn.right {
+  right: 20px;
+}
+
+.slider-btn:hover {
+  background: rgba(255,255,255,0.3);
+}
+
+
+.bottom-infographic {
+    width: 82vw;
+    max-width: 1100px;
+    display: block;
+    margin: 100px auto 200px;
+    position: relative;
+    z-index: 3;
+}
+
+#map {
+    width: 100vw;
+    height: 100vh;
+    display: block;
+    position: relative;
+    z-index: 1;
+    pointer-events: none; /* чтобы карта не мешала прокрутке */
+}
+
+
+.switch-button {
+    display: block;
+    width: fit-content;
+    margin: 80px auto 200px; /* отступы сверху и снизу */
+    padding: 16px 32px;
+
+    font-family: 'Ledger', sans-serif;
+    font-size: 20px;
+    text-decoration: none;
+    color: white;
+
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(6px);
+    border-radius: 12px;
+
+    transition: 0.3s ease;
+}
+
+.switch-button:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.6);
+    transform: translateY(-2px);
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
 }

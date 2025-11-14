@@ -2,154 +2,175 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <title>Уехать — Нельзя Остаться</title>
-  <link rel="stylesheet" href="/static/style.css">
+  <title>Уехать — карта (тёмное сияние)</title>
+
   <style>
-    body {
-      margin: 0;
-      overflow: hidden;
-      background: #050914;
-      color: white;
-      font-family: "Inter", sans-serif;
+    @font-face {
+      font-family: 'Druk';
+      src: url('/static/fonts/DrukTextWideCyTT-Heavy.ttf') format('truetype');
+      font-weight: 900;
     }
 
-    .map-layer {
-      position: absolute;
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 200vh;
+      overflow-x: hidden;
+      background: #040A16; /* ГЛУБОКОЕ ТЁМНОЕ АРКТИЧЕСКОЕ НЕБО */
+    }
+
+    /* CANVAS */
+    canvas#auroraCanvas {
+      position: fixed;
       inset: 0;
       width: 100vw;
       height: 100vh;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    /* КАРТА */
+    object#map {
+      width: 100vw;
+      height: 100vh;
+      z-index: 2;
+      position: relative;
       display: block;
-      transition: opacity 2s ease;
     }
 
-    #mapFull { z-index: 1; }
-    #mapDecline { z-index: 1; opacity: 0; } /* второй слой поначалу невидим */
-
-    .scenario-text {
-      position: absolute;
-      bottom: 60px;
-      left: 60px;
-      font-size: 1.9rem;
-      line-height: 1.45;
-      max-width: 480px;
-      opacity: 0;
-      animation: fadeIn 2s ease forwards 1.5s;
+    /* ЛЕГЕНДА — идентична правому сценарию */
+    #legend {
+      position: fixed;
+      left: 24px;
+      top: 24px;
+      width: 180px;
+      opacity: 0.9;
+      pointer-events: none;
       z-index: 3;
-      transition: opacity 1s ease;
+      transition: opacity 0.45s ease, transform 0.45s ease;
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(12px); }
-      to   { opacity: 1; transform: translateY(0); }
+    #legend.hidden {
+      opacity: 0;
+      transform: translateY(-20px);
     }
 
-    .hidden-text {
-      opacity: 0 !important;
+    @keyframes pulse {
+      0%   { transform: scale(1); opacity: 0.7; }
+      50%  { transform: scale(1.6); opacity: 1; }
+      100% { transform: scale(1); opacity: 0.7; }
     }
   </style>
 </head>
 
 <body>
 
-  <!-- 1. Полная карта -->
-  <object id="mapFull" class="map-layer" type="image/svg+xml" data="/static/Карта_1_pora_data-dataframe.svg"></object>
+  <!-- ТЁМНОЕ СЕВЕРНОЕ СИЯНИЕ -->
+  <canvas id="auroraCanvas"></canvas>
 
-  <!-- 2. Карта только с красными точками -->
-  <object id="mapDecline" class="map-layer" type="image/svg+xml" data="/static/Карта_1_pora_data-dataframe.svg"></object>
+  <!-- ЛЕГЕНДА (точно как справа) -->
+  <object id="legend" type="image/svg+xml" data="/static/Group 1.svg"></object>
 
-  <!-- Текст -->
-  <div id="scenarioText" class="scenario-text">
-    <p><strong>В некоторых местах запятая стоит иначе.</strong></p>
-    <p>
-      Люди уезжают.<br>
-      Становится меньше света,<br>
-      меньше голосов,<br>
-      меньше детей в школах.
-    </p>
-  </div>
+  <!-- ПЕРВАЯ КАРТА (та же) -->
+  <object id="map" type="image/svg+xml"
+          data="/static/Карта_1_pora_data-dataframe.svg"></object>
 
   <script>
-  window.addEventListener("load", () => {
-    const mapFull = document.getElementById("mapFull");
-    const mapDecline = document.getElementById("mapDecline");
-    const text = document.getElementById("scenarioText");
+  // =============================
+  // ГРУСТНОЕ ТЁМНОЕ СИЯНИЕ (АРКТИКА, НОЧЬ)
+  // =============================
 
-    /* === 1. Первая карта: все точки, красные выцветают в серый === */
-    mapFull.addEventListener("load", () => {
-      const svg = mapFull.contentDocument;
-      if (!svg) return;
+  const canvas = document.getElementById("auroraCanvas");
+  const ctx = canvas.getContext("2d");
 
-      // Белые контуры
-      svg.querySelectorAll("[stroke]").forEach(el => {
-        el.setAttribute("stroke", "#ffffff");
-        el.setAttribute("stroke-width", "0.8");
-      });
+  let mouseX = 0;
+  let mouseY = 0;
 
-      // Красные точки плавно становятся серыми с небольшой задержкой
-      const redDots = svg.querySelectorAll('[fill="#F94F0D"], [fill="#f94f0d"], [style*="#F94F0D"], [style*="#f94f0d"]');
-      redDots.forEach(dot => {
-        dot.style.transition = "fill 3s ease-in-out, opacity 3s ease-in-out";
-        const delay = 600 + Math.random() * 1200;
-        setTimeout(() => {
-          dot.style.fill = "#888888"; // гаснут в серый
-        }, delay);
-      });
+  window.addEventListener("mousemove", e => {
+    mouseX = e.clientX / innerWidth;
+    mouseY = e.clientY / innerHeight;
+  });
+
+  function resize() {
+    canvas.width = innerWidth;
+    canvas.height = innerHeight;
+  }
+  resize();
+  window.addEventListener("resize", resize);
+
+  let t = 0;
+
+  /* БОЛЕЕ ТЁМНОЕ, ХОЛОДНОЕ СИЯНИЕ */
+  const clouds = [
+    { color: "rgba(0, 60, 100, 0.25)", size: 520 },
+    { color: "rgba(0, 30, 70, 0.22)", size: 600 },
+    { color: "rgba(40, 80, 110, 0.20)", size: 680 },
+    { color: "rgba(0, 120, 200, 0.17)", size: 540 },
+    { color: "rgba(0, 200, 255, 0.14)", size: 800 }
+  ];
+
+  function drawAurora() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // ГЛУБОКОЕ НЕБО
+    const bg = ctx.createLinearGradient(0, 0, 0, canvas.height);
+    bg.addColorStop(0, "#030914");
+    bg.addColorStop(1, "#08111F");
+    ctx.fillStyle = bg;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // ОБЛАКА СИЯНИЯ
+    clouds.forEach((c, i) => {
+      const x =
+        canvas.width *
+        (0.3 + 0.4 * Math.sin(t / (320 + i * 60)) + (mouseX - 0.5) * 0.15);
+
+      const y =
+        canvas.height *
+        (0.4 + 0.3 * Math.cos(t / (390 + i * 55)) + (mouseY - 0.5) * 0.15);
+
+      const radius = c.size + Math.sin(t / (110 + i * 30)) * 30;
+
+      const grad = ctx.createRadialGradient(x, y, 0, x, y, radius);
+      grad.addColorStop(0, c.color);
+      grad.addColorStop(1, "transparent");
+
+      ctx.globalCompositeOperation = "lighter";
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      ctx.arc(x, y, radius, 0, Math.PI * 2);
+      ctx.fill();
     });
 
-    /* === 2. Вторая карта: только красные точки (остаются) === */
-    mapDecline.addEventListener("load", () => {
-      const svg = mapDecline.contentDocument;
-      if (!svg) return;
+    ctx.globalCompositeOperation = "source-over";
 
-      // Белые контуры
-      svg.querySelectorAll("[stroke]").forEach(el => {
-        el.setAttribute("stroke", "#ffffff");
-        el.setAttribute("stroke-width", "0.8");
-      });
+    t += 1;
+    requestAnimationFrame(drawAurora);
+  }
 
-      // Скрываем голубые
-      const blueDots = svg.querySelectorAll('[fill="#9CF4EE"], [fill="#9cf4ee"], [style*="#9CF4EE"], [style*="#9cf4ee"]');
-      blueDots.forEach(dot => {
-        dot.style.transition = "opacity 1.5s ease-in";
-        dot.style.opacity = "0";
-      });
-    });
+  drawAurora();
 
-    /* === 3. Прокрутка вниз → переход на слой с убыванием === */
-    let switched = false;
-    function switchToDecline() {
-      if (switched) return;
-      switched = true;
+  // =============================
+  // ПУЛЬСАЦИЯ (та же логика, пока отключена)
+  // =============================
 
-      text.classList.add("hidden-text");  // убираем текст
-      mapFull.style.opacity = "0";        // гасим полную карту
-      mapDecline.style.opacity = "1";     // показываем карту с убывающими
+  // =============================
+  // ЛЕГЕНДА — исчезает вниз, появляется вверх
+  // =============================
+  const legend = document.getElementById("legend");
+  let lastScroll = 0;
+
+  window.addEventListener("scroll", () => {
+    const current = scrollY;
+
+    if (current > lastScroll + 20) {
+      legend.classList.add("hidden");
+    } else if (current < lastScroll - 20) {
+      legend.classList.remove("hidden");
     }
 
-    // События для прокрутки и клавиш
-    window.addEventListener("wheel", (e) => {
-      if (e.deltaY > 30) switchToDecline();
-    }, { passive: true });
-
-    window.addEventListener("keydown", (e) => {
-      const k = e.key.toLowerCase();
-      if (k === 'arrowdown' || k === 'pagedown' || k === ' ') {
-        e.preventDefault();
-        switchToDecline();
-      }
-    });
-
-    // свайп вверх (тач)
-    let startY = null;
-    window.addEventListener("touchstart", e => {
-      if (e.touches.length) startY = e.touches[0].clientY;
-    }, { passive: true });
-    window.addEventListener("touchend", e => {
-      if (startY == null) return;
-      const endY = e.changedTouches[0].clientY;
-      if (startY - endY > 60) switchToDecline();
-      startY = null;
-    }, { passive: true });
+    lastScroll = current;
   });
   </script>
 
