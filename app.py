@@ -6,7 +6,7 @@ app = Flask(__name__)
 def index():
     return render_template("index.html")
 
-@app.route("/scenario_left.html")
+@app.route("/left")
 def left_scenario():
     return render_template("scenario_left.html")
 

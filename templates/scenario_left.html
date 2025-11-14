@@ -1,114 +1,175 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <title>Почему люди уезжают из Арктики?</title>
-  <link rel="stylesheet" href="/static/style.css" />
+    <meta charset="UTF-8">
+    <title>Почему люди уезжают из Арктики?</title>
+
+    <!-- Общий стиль, где уже есть legend + legend.hidden -->
+    <link rel="stylesheet" href="/static/style.css">
 </head>
 
 <body>
+<!-- Заголовок -->
+<h1 class="scenario-title">Уехать нельзя, остаться</h1>
 
-  <!-- СЕВЕРНОЕ СИЯНИЕ -->
-  <canvas id="auroraCanvas"></canvas>
+<!-- СЕВЕРНОЕ СИЯНИЕ -->
+<canvas id="auroraCanvas"></canvas>
 
-  <!-- ЛЕГЕНДА -->
-  <img id="legend" src="/static/Group1.svg" alt="Легенда">
+<!-- ЛЕГЕНДА — ДОЛЖЕН БЫТЬ ТОЧНО ТАКОЙ ЖЕ ID -->
+<img id="legend" src="/static/Group1.svg" alt="legend">
 
-  <!-- КАРТА -->
-  <object id="map" type="image/svg+xml" data="/static/Карта_1_pora_data-dataframe.svg"></object>
+<!-- КАРТА -->
+<object id="map" type="image/svg+xml" data="/static/Карта_1_pora_data-dataframe.svg"></object>
 
-  <!-- ТЕКСТ -->
-  <div class="info-text">
-    В некоторых местах запятая поставлена иначе.<br>
-    Люди уезжают.<br><br>
+<!-- ТЕКСТ -->
+<div class="info-text">
+    В некоторых местах запятая стоит иначе.<br>
+    Люди уезжают. Становится меньше света,<br>
+    меньше голосов, меньше детей в школах.
+</div>
 
-    Становится меньше света,<br>
-    меньше голосов,<br>
-    меньше детей в школах.
-  </div>
+<!-- КАРТОЧНЫЙ СЛАЙДЕР -->
+<div class="slider-wrapper">
+    <button class="slider-btn left">←</button>
 
-  <!-- СКРИПТЫ -->
-  <script src="/static/script.js"></script>
+    <div class="slider-track">
 
-  <!-- СЕВЕРНОЕ СИЯНИЕ — ТЕМНЕЕ, КАК ТЫ ПРОСИЛ -->
-  <script>
+        <div class="slide">
+            <img src="/static/Frame8.svg" alt="">
+        </div>
+
+        <div class="slide">
+            <img src="/static/Frame9.svg" alt="">
+        </div>
+
+        <div class="slide">
+            <img src="/static/Frame2.svg" alt="">
+        </div>
+
+        <div class="slide">
+            <img src="/static/Frame10.svg" alt="">
+        </div>
+
+        <div class="slide">
+            <img src="/static/Frame 12.png" alt="">
+        </div>
+
+    </div>
+
+    <button class="slider-btn right">→</button>
+</div>
+
+<!-- ИНФОГРАФИКА ПОСЛЕ СЛАЙДЕРА -->
+<img class="bottom-infographic"
+     src="/static/Frame 13.svg"
+     alt="Инфографика">
+
+<!-- КНОПКА НАЗАД -->
+<a href="/scenario_right.html" class="switch-button">
+    Посмотреть другую сторону Арктики
+</a>
+
+<!-- JS-ЛОГИКА -->
+<script src="/static/script.js"></script>
+
+<!-- СЕВЕРНОЕ СИЯНИЕ -->
+<script>
     const canvas = document.getElementById("auroraCanvas");
     const ctx = canvas.getContext("2d");
 
     function resize() {
-      canvas.width = innerWidth;
-      canvas.height = innerHeight;
+        canvas.width = innerWidth;
+        canvas.height = innerHeight;
     }
     resize();
     window.addEventListener("resize", resize);
 
     let t = 0;
-    let mouseX = 0, mouseY = 0;
-
-    window.addEventListener("mousemove", e => {
-      mouseX = e.clientX / innerWidth;
-      mouseY = e.clientY / innerHeight;
-    });
-
     const clouds = [
-      { color: "rgba(120,180,255,0.18)", size: 450 },
-      { color: "rgba(80,140,220,0.22)", size: 520 },
-      { color: "rgba(60,120,200,0.18)", size: 580 },
-      { color: "rgba(150,110,255,0.14)", size: 500 }
+        { color: "rgba(255,120,160,0.20)", size: 480 },
+        { color: "rgba(120,200,255,0.25)", size: 560 },
+        { color: "rgba(120,255,190,0.20)", size: 620 },
+        { color: "rgba(180,140,255,0.18)", size: 520 },
+        { color: "rgba(255,255,180,0.16)", size: 750 }
     ];
 
+    let mouseX = 0, mouseY = 0;
+    window.addEventListener("mousemove", e => {
+        mouseX = e.clientX / innerWidth;
+        mouseY = e.clientY / innerHeight;
+    });
+
     function drawAurora() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // ТЕМНЫЙ ФОН КАК НА ПРАВОМ СЦЕНАРИИ
-      let bg = ctx.createLinearGradient(0, 0, 0, canvas.height);
-      bg.addColorStop(0, "#322C55");
-      bg.addColorStop(1, "#241F3D");
-      ctx.fillStyle = bg;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+        let bg = ctx.createLinearGradient(0,0,0,canvas.height);
+        bg.addColorStop(0, "#322C55");
+        bg.addColorStop(1, "#241F3D");
 
-      clouds.forEach((c, i) => {
-        const x = canvas.width * (0.35 + 0.35 * Math.sin(t / (260 + i * 40)) + (mouseX - 0.5) * 0.2);
-        const y = canvas.height * (0.42 + 0.28 * Math.cos(t / (280 + i * 50)) + (mouseY - 0.5) * 0.2);
-        const r = c.size + Math.sin(t / (90 + i * 25)) * 35;
+        ctx.fillStyle = bg;
+        ctx.fillRect(0,0,canvas.width,canvas.height);
 
-        const g = ctx.createRadialGradient(x, y, 0, x, y, r);
-        g.addColorStop(0, c.color);
-        g.addColorStop(1, "transparent");
+        clouds.forEach((c,i)=>{
+            const x = canvas.width * (0.3 + 0.4 * Math.sin(t/(260+i*40)) + (mouseX-0.5)*0.25);
+            const y = canvas.height * (0.4 + 0.3 * Math.cos(t/(280+i*50)) + (mouseY-0.5)*0.25);
+            const r = c.size + Math.sin(t/(90+i*25))*35;
 
-        ctx.globalCompositeOperation = "lighter";
-        ctx.fillStyle = g;
-        ctx.beginPath();
-        ctx.arc(x, y, r, 0, Math.PI * 2);
-        ctx.fill();
-      });
+            const g = ctx.createRadialGradient(x,y,0,x,y,r);
+            g.addColorStop(0, c.color);
+            g.addColorStop(1, "transparent");
 
-      ctx.globalCompositeOperation = "source-over";
-      t++;
-      requestAnimationFrame(drawAurora);
+            ctx.globalCompositeOperation = "lighter";
+            ctx.beginPath();
+            ctx.fillStyle = g;
+            ctx.arc(x,y,r,0,Math.PI*2);
+            ctx.fill();
+        });
+
+        ctx.globalCompositeOperation = "source-over";
+        t++;
+        requestAnimationFrame(drawAurora);
     }
 
     drawAurora();
-  </script>
+</script>
 
-  <!-- ПОВЕДЕНИЕ ЛЕГЕНДЫ (ИСКАЗАНИЕ ПРИ СКРОЛЛЕ) -->
-  <script>
+<script>
+const track = document.querySelector(".slider-track");
+const btnLeft = document.querySelector(".slider-btn.left");
+const btnRight = document.querySelector(".slider-btn.right");
+
+btnLeft.addEventListener("click", () => {
+    track.scrollBy({ left: -window.innerWidth * 0.75, behavior: "smooth" });
+});
+
+btnRight.addEventListener("click", () => {
+    track.scrollBy({ left: window.innerWidth * 0.75, behavior: "smooth" });
+});
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
     const legend = document.getElementById("legend");
-    let lastScroll = 0;
+    const map = document.getElementById("map");
 
-    window.addEventListener("scroll", () => {
-      const current = scrollY;
+    function updateLegendVisibility() {
+        const mapRect = map.getBoundingClientRect();
 
-      if (current > lastScroll + 20) {
-        legend.classList.add("hidden");
-      }
-      else if (current < lastScroll - 20) {
-        legend.classList.remove("hidden");
-      }
+        const mapVisible =
+            mapRect.top < window.innerHeight * 0.6 &&   // верх карты в зоне видимости
+            mapRect.bottom > window.innerHeight * 0.2;  // низ карты тоже ближе к экрану
 
-      lastScroll = current;
-    });
-  </script>
+        if (mapVisible) {
+            legend.classList.remove("hidden"); // показать
+        } else {
+            legend.classList.add("hidden"); // скрыть, если карты нет в зоне экрана
+        }
+    }
+
+    window.addEventListener("scroll", updateLegendVisibility);
+    updateLegendVisibility();
+});
+</script>
 
 </body>
 </html>
