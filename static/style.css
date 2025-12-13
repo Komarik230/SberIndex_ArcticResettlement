@@ -106,8 +106,8 @@ canvas#auroraCanvas {
 }
 
 .slide img {
-  width: 80vw;
-  max-width: 900px;
+  width: 76vw;
+  max-width: 855px;
 }
 
 /* ============================
@@ -274,4 +274,40 @@ canvas#auroraCanvas {
     padding: 0 22px;
 
     z-index: 3;             /* ниже легенды, но выше карты */
+}
+
+
+@media (max-width: 768px) {
+
+  /* Заголовок */
+  .scenario-title {
+    font-size: 36px !important;
+    top: 20px !important;
+    line-height: 1.1;
+    padding: 0 20px;
+    text-align: center;
+  }
+
+  /* Подзаголовок */
+  .scenario-subtitle {
+    font-size: 16px !important;
+    top: 120px !important;       /* ← красивое расстояние под заголовком */
+    line-height: 1.35;
+    padding: 0 40px;
+    max-width: 90vw;
+    text-align: center;
+  }
+
+  /* Легенда */
+  #legend {
+    width: 240px !important;
+    left: 10px !important;
+    top: 230px !important;        /* ← под подзаголовком */
+  }
+
+  /* Карта */
+  .hero #map {
+    top: 330px !important;        /* ← ниже легенды */
+    height: calc(100vh - 330px) !important;
+  }
 }
