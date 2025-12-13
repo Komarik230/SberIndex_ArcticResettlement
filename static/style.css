@@ -72,6 +72,32 @@ canvas#auroraCanvas {
   padding: 0 22px;
 }
 
+
+.dop-text {
+  font-family: 'Ledger', sans-serif;
+  font-size: 25px;
+  line-height: 1.2;
+  max-width: 900px;
+  margin: 20px auto 20px;
+  text-align: center;
+  z-index: 3;
+  position: relative;
+  padding: 0 22px;
+}
+
+
+.dopdop-text {
+  font-family: 'Ledger', sans-serif;
+  font-size: 40px;
+  line-height: 1.2;
+  max-width: 900px;
+  margin: 60px auto 60px;
+  text-align: center;
+  z-index: 3;
+  position: relative;
+  padding: 0 22px;
+}
+
 /* ============================
    ИЗОБРАЖЕНИЕ ПОСЛЕ ТЕКСТА
 ============================ */
