@@ -337,3 +337,21 @@ canvas#auroraCanvas {
     height: calc(100vh - 330px) !important;
   }
 }
+
+
+.slider-hint {
+    font-family: 'Ledger', serif;
+    font-size: 16px;
+    text-align: center;
+
+    color: #F94F0D; /* твой оранжевый */
+
+    margin: 0 auto 18px;
+    max-width: 600px;
+    padding: 0 20px;
+
+    z-index: 4;
+    position: relative;
+
+    opacity: 0.85;
+}
