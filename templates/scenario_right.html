@@ -4,11 +4,12 @@
     <meta charset="UTF-8">
     <title>Почему люди остаются в Арктике?</title>
 
+    <!-- Общий стиль -->
     <link rel="stylesheet" href="/static/style.css">
-
 </head>
 
 <body>
+
 <!-- СЕВЕРНОЕ СИЯНИЕ -->
 <canvas id="auroraCanvas"></canvas>
 
@@ -18,128 +19,120 @@
     <h1 class="scenario-title">Уехать нельзя, остаться</h1>
 
     <h4 class="scenario-subtitle">
-        Вы оказались в меньшинстве, сделав такой выбор.
-        За 2010–2021 лишь в 34 из 128 населённых пунктах население выросло.
-        Большая часть людей уезжает из Арктики, а населённые пункты пустеют. </h4>
+        Вы&nbsp;оказались в&nbsp;меньшинстве, сделав такой выбор.
+        За&nbsp;2010–2021&nbsp;годы лишь в&nbsp;34&nbsp;из&nbsp;128
+        населённых пунктов население выросло.
+        Большая часть людей уезжает из&nbsp;Арктики, а&nbsp;населённые
+        пункты пустеют.
+    </h4>
+
     <img id="legend" src="/static/Group1.svg" alt="legend">
-
 </div>
 
-<!-- ТЕКСТ -->
+<!-- ВСТУПИТЕЛЬНЫЙ ТЕКСТ -->
 <div class="info-text">
-    Люди остаются в Арктике.<br>
-    Кто-то даже приезжает.<br>
-    Почему?<br>
-    Мы не сможем узнать наверняка.<br>
-    Но мы проанализировали, что объединяет территории, которым удаётся расти.<br>
-    Делимся.
-
+    Люди остаются в&nbsp;Арктике. Кто-то даже приезжает.
+    Почему? Мы&nbsp;не&nbsp;сможем узнать наверняка.
+    Но&nbsp;мы&nbsp;проанализировали, что&nbsp;объединяет территории,
+    которым удаётся расти. Делимся.
 </div>
 
+<!-- ПОДСКАЗКА ДЛЯ СЛАЙДЕРА -->
 <div class="slider-hint">
-    Нажмите на стрелочку, чтобы увидеть остальные графики
+    Нажмите на&nbsp;стрелочку, чтобы увидеть остальные графики
 </div>
 
 <!-- СЛАЙДЕР -->
 <div class="slider-wrapper">
-
     <button class="slider-btn left">←</button>
 
     <div class="slider-track">
-
-        <!-- СЛАЙД 1 — Frame2 -->
         <div class="slide">
             <img src="/static/Frame2.svg" alt="кадр 1">
         </div>
 
-        <!-- СЛАЙД 2 — Frame6 -->
         <div class="slide">
             <img src="/static/Frame6.svg" alt="кадр 2">
         </div>
 
-        <!-- СЛАЙД 3 — Frame7 -->
         <div class="slide">
             <img src="/static/Frame7.svg" alt="кадр 3">
         </div>
-
     </div>
 
     <button class="slider-btn right">→</button>
-
 </div>
 
-<!-- ИНФОГРАФИКА ПОСЛЕ СЛАЙДЕРА -->
-<img class="bottom-infographic"
-     src="/static/infographic_positive_1.svg"
-     alt="Инфографика">
+<!-- ИНФОГРАФИКА -->
+<img
+    class="bottom-infographic"
+    src="/static/infographic_positive_1.svg"
+    alt="Инфографика"
+>
 
-
-<!-- ТЕКСТ -->
+<!-- ОСНОВНОЙ АНАЛИТИЧЕСКИЙ ТЕКСТ -->
 <div class="dop-text">
-    Наш анализ показывает: <br>
-    не выгодность расположения и не зарплаты удерживают людей. <br>
-    Решающими оказываются образование, экология, <br>
-    инфраструктура и доступ к базовым услугам. <br>
-    Даже у лидера по приросту населения есть проблемы — аварийное жильё <br>
-    и нехватка медперсонала. <br>
-    Но развитость остальных характеристик это компенсирует. <br>
-
+    Наш анализ показывает: не&nbsp;выгодность расположения
+    и&nbsp;не&nbsp;зарплаты удерживают людей.
+    Решающими оказываются образование, экология,
+    инфраструктура и&nbsp;доступ&nbsp;к&nbsp;базовым услугам.
+    Даже у&nbsp;лидера по&nbsp;приросту населения есть проблемы —
+    аварийное жильё и&nbsp;нехватка медперсонала.
+    Но&nbsp;развитость остальных характеристик это компенсирует.
 </div>
 
+<!-- ФИНАЛЬНЫЙ ВОПРОС -->
 <div class="dopdop-text">
-    Вы не испугались трудностей и остались в Арктике, <br>
-    но почему многие всё-таки уезжают?
-
+    Вы&nbsp;не&nbsp;испугались трудностей и&nbsp;остались в&nbsp;Арктике,
+    но&nbsp;почему многие всё-таки уезжают?
 </div>
 
-
-
-<a href="/left" class="switch-button">
+<!-- КНОПКА ПЕРЕКЛЮЧЕНИЯ -->
+<a href="/scenario_left.html" class="switch-button">
     Посмотреть обратную сторону Арктики
 </a>
 
-
-<!-- СКРИПТЫ -->
+<!-- ОСНОВНОЙ СКРИПТ -->
 <script src="/static/script.js"></script>
 
-<!-- ВОЗВРАЩАЮ СИЯНИЕ -->
+<!-- СЕВЕРНОЕ СИЯНИЕ -->
 <script>
-    const canvas = document.getElementById("auroraCanvas");
-    const ctx = canvas.getContext("2d");
+const canvas = document.getElementById("auroraCanvas");
+const ctx = canvas.getContext("2d");
 
-    function resize() {
-        canvas.width = innerWidth;
-        canvas.height = innerHeight;
-    }
-    resize();
-    window.addEventListener("resize", resize);
+function resize() {
+    canvas.width = innerWidth;
+    canvas.height = innerHeight;
+}
+resize();
+window.addEventListener("resize", resize);
 
-    let t = 0;
-    const clouds = [
-      { color: "rgba(255,120,160,0.20)", size: 480 },
-      { color: "rgba(120,200,255,0.25)", size: 560 },
-      { color: "rgba(120,255,190,0.20)", size: 620 },
-      { color: "rgba(180,140,255,0.18)", size: 520 },
-      { color: "rgba(255,255,180,0.16)", size: 750 }
-    ];
+let t = 0;
+const clouds = [
+    { color: "rgba(255,120,160,0.20)", size: 480 },
+    { color: "rgba(120,200,255,0.25)", size: 560 },
+    { color: "rgba(120,255,190,0.20)", size: 620 },
+    { color: "rgba(180,140,255,0.18)", size: 520 },
+    { color: "rgba(255,255,180,0.16)", size: 750 }
+];
 
-    let mouseX = 0, mouseY = 0;
-    window.addEventListener("mousemove", e => {
-      mouseX = e.clientX / innerWidth;
-      mouseY = e.clientY / innerHeight;
-    });
+let mouseX = 0, mouseY = 0;
+window.addEventListener("mousemove", e => {
+    mouseX = e.clientX / innerWidth;
+    mouseY = e.clientY / innerHeight;
+});
 
-    function drawAurora() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+function drawAurora() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      let bg = ctx.createLinearGradient(0,0,0,canvas.height);
+    const bg = ctx.createLinearGradient(0,0,0,canvas.height);
     bg.addColorStop(0, "#322C55");
     bg.addColorStop(1, "#241F3D");
 
-      ctx.fillStyle = bg;
-      ctx.fillRect(0,0,canvas.width,canvas.height);
+    ctx.fillStyle = bg;
+    ctx.fillRect(0,0,canvas.width,canvas.height);
 
-      clouds.forEach((c,i)=>{
+    clouds.forEach((c,i)=>{
         const x = canvas.width * (0.3 + 0.4 * Math.sin(t/(260+i*40)) + (mouseX-0.5)*0.25);
         const y = canvas.height * (0.4 + 0.3 * Math.cos(t/(280+i*50)) + (mouseY-0.5)*0.25);
         const r = c.size + Math.sin(t/(90+i*25))*35;
@@ -149,18 +142,18 @@
         g.addColorStop(1, "transparent");
 
         ctx.globalCompositeOperation = "lighter";
-        ctx.fillStyle = g;
         ctx.beginPath();
+        ctx.fillStyle = g;
         ctx.arc(x,y,r,0,Math.PI*2);
         ctx.fill();
-      });
+    });
 
-      ctx.globalCompositeOperation = "source-over";
-      t++;
-      requestAnimationFrame(drawAurora);
-    }
+    ctx.globalCompositeOperation = "source-over";
+    t++;
+    requestAnimationFrame(drawAurora);
+}
 
-    drawAurora();
+drawAurora();
 </script>
 
 </body>

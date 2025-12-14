@@ -10,7 +10,6 @@
 
 <body>
 
-
 <!-- СЕВЕРНОЕ СИЯНИЕ -->
 <canvas id="auroraCanvas"></canvas>
 
@@ -21,25 +20,23 @@
 
     <h4 class="scenario-subtitle">
         Вы оказались в большинстве, сделав такой выбор.
-        Многие, как и вы, решили уехать,
-        и 94 из 128 населённых пунктов Арктики опустели. </h4>
+        Многие, как&nbsp;и&nbsp;вы, решили уехать, и&nbsp;94&nbsp;из&nbsp;128
+        населённых пунктов Арктики опустели.
+    </h4>
 
     <img id="legend" src="/static/Group1.svg" alt="legend">
-
 </div>
 
-
-<!-- ТЕКСТ -->
+<!-- ВСТУПИТЕЛЬНЫЙ ТЕКСТ -->
 <div class="info-text">
-    Из многих мест люди уезжают: становится меньше света, <br>
-    меньше голосов, меньше детей в школах. <br>
-    Мы проанализировали, что объединяет территории, <br>
-    население которых падает. <br>
-    Делимся.
+    Из&nbsp;многих мест люди уезжают: становится меньше света, меньше голосов,
+    меньше детей в&nbsp;школах. Мы&nbsp;проанализировали, что&nbsp;объединяет
+    территории, население которых падает. Делимся.
 </div>
 
+<!-- ПОДСКАЗКА ДЛЯ СЛАЙДЕРА -->
 <div class="slider-hint">
-    Нажмите на стрелочку, чтобы увидеть остальные графики
+    Нажмите на&nbsp;стрелочку, чтобы увидеть остальные графики
 </div>
 
 <!-- КАРТОЧНЫЙ СЛАЙДЕР -->
@@ -47,7 +44,6 @@
     <button class="slider-btn left">←</button>
 
     <div class="slider-track">
-
         <div class="slide">
             <img src="/static/Frame8.svg" alt="">
         </div>
@@ -67,38 +63,41 @@
         <div class="slide">
             <img src="/static/Frame12.svg" alt="">
         </div>
-
     </div>
 
     <button class="slider-btn right">→</button>
 </div>
 
-<!-- ИНФОГРАФИКА ПОСЛЕ СЛАЙДЕРА -->
-<img class="bottom-infographic"
-     src="/static/Frame 13.svg"
-     alt="Инфографика">
+<!-- ИНФОГРАФИКА -->
+<img
+    class="bottom-infographic"
+    src="/static/Frame 13.svg"
+    alt="Инфографика"
+>
 
+<!-- ОСНОВНОЙ АНАЛИТИЧЕСКИЙ ТЕКСТ -->
 <div class="dop-text">
-    Наш анализ показывает: <br>
-    отток усиливается даже при высоких зарплатах и государственных квартирах. <br>
-    Люди уезжают, когда инфраструктура приходит в упадок, медперсонала не хватает, <br>
-    образование не развивается, а экологическая ситуация ухудшается. <br>
+    Наш анализ показывает: отток усиливается даже при&nbsp;высоких зарплатах
+    и&nbsp;государственных квартирах. Люди уезжают, когда инфраструктура
+    приходит в&nbsp;упадок, не&nbsp;хватает медперсонала, образование
+    не&nbsp;развивается, а&nbsp;экологическая ситуация ухудшается.
 </div>
 
+<!-- ФИНАЛЬНЫЙ ВОПРОС -->
 <div class="dopdop-text">
-    Да, Арктика теряет жителей, <br>
-    но что привлекает тех, кто всё-таки решается остаться? <br>
+    Да, Арктика теряет жителей, но&nbsp;что&nbsp;привлекает тех,
+    кто&nbsp;всё-таки решается остаться?
 </div>
 
-<!-- КНОПКА НАЗАД -->
+<!-- КНОПКА ПЕРЕКЛЮЧЕНИЯ -->
 <a href="/scenario_right.html" class="switch-button">
     Посмотреть другую сторону Арктики
 </a>
 
-
+<!-- ОСНОВНОЙ СКРИПТ -->
 <script src="/static/script.js"></script>
 
-
+<!-- ЛОГИКА ЛЕГЕНДЫ -->
 <script>
 const legend = document.getElementById("legend");
 const map = document.getElementById("map");
@@ -109,14 +108,11 @@ function updateLegendVisibility() {
     const rect = map.getBoundingClientRect();
     const windowHeight = window.innerHeight;
 
-    // карта пересекается с экраном? (мы на "экране карты")
     const mapInView = rect.top < windowHeight && rect.bottom > 0;
 
     if (mapInView) {
-        // на первом экране карты — легенда ПРИСУТСТВУЕТ
         legend.classList.remove("hidden");
     } else {
-        // как только карту ПРОКРУТИЛИ выше — легенды больше нет
         legend.classList.add("hidden");
     }
 }
@@ -126,9 +122,7 @@ window.addEventListener("resize", updateLegendVisibility);
 window.addEventListener("load", updateLegendVisibility);
 </script>
 
-
-
-<!-- ====== JS: северное сияние ====== -->
+<!-- СЕВЕРНОЕ СИЯНИЕ -->
 <script>
 const canvas = document.getElementById("auroraCanvas");
 const ctx = canvas.getContext("2d");
@@ -161,6 +155,7 @@ function drawAurora() {
     const bg = ctx.createLinearGradient(0,0,0,canvas.height);
     bg.addColorStop(0, "#322C55");
     bg.addColorStop(1, "#241F3D");
+
     ctx.fillStyle = bg;
     ctx.fillRect(0,0,canvas.width,canvas.height);
 
